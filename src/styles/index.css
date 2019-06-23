@@ -9,7 +9,3 @@ html,
 body {
   height: 100%;
 }
-body {
-  margin: 0;
-  background: url('../assets/login_bg.jpg') no-repeat fixed;
-}
