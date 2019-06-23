@@ -39,7 +39,8 @@ export default {
       form: {
         mobile: '18303610801',
         code: ''
-      }
+      },
+      captchaObj: null // 通过 initGeetest 得到极验验证码对象
     }
   },
   methods: {
@@ -49,6 +50,11 @@ export default {
 
     handleSendCode () {
       const { mobile } = this.form
+
+      // 如果已经初始化了，就直接 verify
+      if (this.captchaObj) {
+        return this.captchaObj.verify()
+      }
 
       axios({
         method: 'GET',
@@ -63,7 +69,8 @@ export default {
           offline: !data.success,
           new_captcha: data.new_captcha,
           product: 'bind' // 隐藏按钮式
-        }, function (captchaObj) {
+        }, (captchaObj) => {
+          this.captchaObj = captchaObj
           // 这里可以调用验证实例 captchaObj 的实例方法
           captchaObj.onReady(function () {
             // 只有 ready 了才能显示验证码
