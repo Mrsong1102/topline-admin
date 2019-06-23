@@ -30,7 +30,7 @@
 
 <script>
 import axios from 'axios'
-import '@/vendor/gt.js' // gt.js会向全局 window 暴露一个函数 initGeetest
+import '@/vendor/gt' // gt.js会向全局 window 暴露一个函数 initGeetest
 
 export default {
   name: 'AppLogin',
@@ -54,7 +54,24 @@ export default {
         method: 'GET',
         url: `http://ttapi.research.itcast.cn/mp/v1_0/captchas/${mobile}`
       }).then(res => {
-        console.log(res.data)
+        const data = res.data.data
+        // 请检测data的数据结构， 保证data.gt, data.challenge, data.success有值
+        window.initGeetest({
+          // 以下配置参数来自服务端 SDK
+          gt: data.gt,
+          challenge: data.challenge,
+          offline: !data.success,
+          new_captcha: data.new_captcha,
+          product: 'bind' // 隐藏按钮式
+        }, function (captchaObj) {
+          // 这里可以调用验证实例 captchaObj 的实例方法
+          captchaObj.onReady(function () {
+            // 只有 ready 了才能显示验证码
+            captchaObj.verify() // 显示验证码
+          }).onSuccess(function () {
+            console.log('验证成功了')
+          })
+        })
       })
     }
   }
