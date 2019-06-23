@@ -1,0 +1,15 @@
+/*
+  *把公共的样式写到这里，然后再main.js中全局生效
+*/
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: url('../assets/login_bg.jpg') no-repeat fixed;
+}
