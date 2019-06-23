@@ -62,23 +62,46 @@ export default {
       }).then(res => {
         const data = res.data.data
         // 请检测data的数据结构， 保证data.gt, data.challenge, data.success有值
-        window.initGeetest({
-          // 以下配置参数来自服务端 SDK
-          gt: data.gt,
-          challenge: data.challenge,
-          offline: !data.success,
-          new_captcha: data.new_captcha,
-          product: 'bind' // 隐藏按钮式
-        }, (captchaObj) => {
-          this.captchaObj = captchaObj
-          // 这里可以调用验证实例 captchaObj 的实例方法
-          captchaObj.onReady(function () {
-            // 只有 ready 了才能显示验证码
-            captchaObj.verify() // 显示验证码
-          }).onSuccess(function () {
-            console.log('验证成功了')
-          })
-        })
+        window.initGeetest(
+          {
+            // 以下配置参数来自服务端 SDK
+            gt: data.gt,
+            challenge: data.challenge,
+            offline: !data.success,
+            new_captcha: data.new_captcha,
+            product: 'bind' // 隐藏按钮式
+          },
+          captchaObj => {
+            this.captchaObj = captchaObj
+            // 这里可以调用验证实例 captchaObj 的实例方法
+            captchaObj
+              .onReady(function () {
+                // 只有 ready 了才能显示验证码
+                captchaObj.verify() // 显示验证码
+              })
+              .onSuccess(function () {
+                const {
+                  geetest_challenge: challenge,
+                  geetest_seccode: seccode,
+                  geetest_validate: validate
+                } = captchaObj.getValidate()
+
+                // 调用获取短信验证码 （极验 API2）接口，发送短信
+                axios({
+                  method: 'GET',
+                  url: `http://ttapi.research.itcast.cn/mp/v1_0/sms/codes/${mobile}`,
+                  params: {
+                    // 专门用来传递 query 查询字符串参数
+                    challenge,
+                    seccode,
+                    validate
+                  }
+                }).then(res => {
+                  console.log(res.data)
+                })
+              })
+          }
+        )
       })
     }
   }
