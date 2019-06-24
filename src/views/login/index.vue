@@ -26,7 +26,12 @@
           </el-form-item>
           <el-form-item>
             <!-- 给组建加class，会做用到他的根元素 -->
-            <el-button class="btn-login" type="primary" @click="handleLogin">登录</el-button>
+            <el-button
+            class="btn-login"
+            type="primary"
+            @click="handleLogin"
+            :loading="loginLoading"
+            >登录</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -42,11 +47,12 @@ export default {
   name: 'AppLogin',
   data () {
     return {
-      form: {
+      form: { // 表单数据
         mobile: '18303610801',
         code: ''
       },
-      rules: {
+      loginLoading: false, // 登录按钮的 Loading 状态
+      rules: { // 表单验证规则
         mobile: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
           { len: 11, message: '长度必须为11个字符', trigger: 'blur' }
@@ -70,7 +76,8 @@ export default {
         this.submitLogin()
       })
     },
-    login () {
+    submitLogin () {
+      this.loginLoading = true
       axios({
         method: 'POST',
         url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
@@ -81,6 +88,7 @@ export default {
           message: '登陆成功',
           type: 'success'
         })
+        this.loginLoading = false
         // 建议路由跳转都使用 name 去跳转，路由传参非常方便
         this.$router.push({
           name: 'home'
@@ -89,6 +97,7 @@ export default {
         if (err.response.status === 400) {
           this.$message.error('登录失败，手机号或验证码错误')
         }
+        this.loginLoading = false
       })
     },
 
