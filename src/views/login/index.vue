@@ -111,6 +111,17 @@ export default {
     },
 
     handleSendCode () {
+      // 校验手机号是否有效
+      // 表单组件有一个方法 validateField 可以用于对部分表单字段进行校验的方法
+      this.$refs['ruleForm'].validateField('mobile', errorMessage => {
+        if (errorMessage.trim().length > 0) {
+          return
+        }
+        // 手机号码有效，初始化验证码插件
+        this.showGeetest()
+      })
+    },
+    showGeetest () {
       const { mobile } = this.form
 
       // 如果已经初始化了，就直接 verify
