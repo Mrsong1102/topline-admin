@@ -80,7 +80,8 @@ export default {
       },
       captchaObj: null, // 通过 initGeetest 得到极验验证码对象
       codeSecons: initCodeSeconds, // 倒计时的时间
-      codeTimer: null // 倒计时定时器
+      codeTimer: null, // 倒计时定时器
+      sendMobile: '' // 保存初始化验证码之后发送短信的手机号
     }
   },
   methods: {
@@ -126,21 +127,36 @@ export default {
         if (errorMessage.trim().length > 0) {
           return
         }
-        // 手机号码有效，初始化验证码插件
-        this.showGeetest()
+        // 如果已经初始化了，就直接 verify
+        // 手机号码验证通过
+        // 验证码是否有验证码插件对象
+        if (this.captchaObj) {
+          // 手机号码有效，初始化验证码插件
+          // this.showGeetest()
+          // 如果用户输入的手机号和之前初始化的验证码手机号不一致，就基于当前手机号重新初始化
+          // 否则，直接 verify 显示
+          if (this.form.mobile !== this.sendMobile) {
+            // 手机号码发生改变，重新初始化验证码插件
+            // 重新初始化之前，将原来的验证码插件 DOM 删除
+            document.body.removeChild(document.querySelector('.geetest_panel'))
+            // 重新初始化
+            this.showGeetest()
+          } else {
+            // 一致，直接 verify 显示
+            this.captchaObj.verify()
+          }
+        } else {
+          // 这里是第一次初始化验证码插件
+          this.showGeetest()
+        }
       })
     },
     showGeetest () {
-      const { mobile } = this.form
-
-      // 如果已经初始化了，就直接 verify
-      if (this.captchaObj) {
-        return this.captchaObj.verify()
-      }
+      // const { mobile } = this.form
       // 函数中的 function 定义的函数中的 this 指向 window
       axios({
         method: 'GET',
-        url: `http://ttapi.research.itcast.cn/mp/v1_0/captchas/${mobile}`
+        url: `http://ttapi.research.itcast.cn/mp/v1_0/captchas/${this.form.mobile}`
       }).then(res => {
         const data = res.data.data
         // 请检测data的数据结构， 保证data.gt, data.challenge, data.success有值
@@ -159,6 +175,7 @@ export default {
             captchaObj
               .onReady(() => {
                 // 只有 ready 了才能显示验证码
+                this.sendMobile = this.form.mobile
                 captchaObj.verify() // 显示验证码
               })
               .onSuccess(() => {
@@ -171,7 +188,7 @@ export default {
                 // 调用获取短信验证码 （极验 API2）接口，发送短信
                 axios({
                   method: 'GET',
-                  url: `http://ttapi.research.itcast.cn/mp/v1_0/sms/codes/${mobile}`,
+                  url: `http://ttapi.research.itcast.cn/mp/v1_0/sms/codes/${this.form.mobile}`,
                   params: {
                     // 专门用来传递 query 查询字符串参数
                     challenge,
