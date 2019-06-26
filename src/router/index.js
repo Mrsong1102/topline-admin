@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import nprogress from 'nprogress'
 
 Vue.use(Router)
 
@@ -44,8 +45,9 @@ const router = new Router({
  * form 来自哪里
  * next 允许通过的方法
  * 渲染路由之前先经过下边代码
- */
+
 router.beforeEach((to, from, next) => {
+  nprogress.start()
   const userInfo = window.localStorage.getItem('user_info')
 
   // 如果是非 /login 页面，判断其登录状态
@@ -66,6 +68,14 @@ router.beforeEach((to, from, next) => {
       next()
     }
   }
+})
+*/
+
+/**
+ * 路由导航完成的时候进入这里
+ */
+router.afterEach((to, from) => {
+  nprogress.done()
 })
 
 export default router
