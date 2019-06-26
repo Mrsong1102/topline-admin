@@ -20,8 +20,11 @@ export default {
   name: 'AppHeader',
   data () {
     return {
-
+      userInfo: {}
     }
+  },
+  created () {
+    this.userInfo = JSON.parse(window.localStorage.getItem('user_info'))
   }
 }
 </script>
