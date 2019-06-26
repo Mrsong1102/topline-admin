@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
   // {
   //   // 路由的名字,和组件名没关系，就是path的别名
@@ -38,3 +38,34 @@ export default new Router({
     }
   ]
 })
+
+/**
+ * to 去哪
+ * form 来自哪里
+ * next 允许通过的方法
+ * 渲染路由之前先经过下边代码
+ */
+router.beforeEach((to, from, next) => {
+  const userInfo = window.localStorage.getItem('user_info')
+
+  // 如果是非 /login 页面，判断其登录状态
+  if (to.path !== '/login') {
+    // 如果没有登录，让其跳转到登录页
+    if (!userInfo) {
+      return next({ name: 'login' })
+    } else {
+      // 如果登录了，则允许通过
+      next()
+    }
+  } else {
+    // 如果登录了，就不允许访问登录页面了
+    if (userInfo) {
+      next(false)
+    } else {
+      // 没有登录,才允许访问登录页
+      next()
+    }
+  }
+})
+
+export default router
