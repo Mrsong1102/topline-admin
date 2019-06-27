@@ -4,7 +4,7 @@
     <el-col :span="10">
       <el-dropdown trigger="click">
         <span class="el-dropdown-link">
-          <img width="30" src="http://toutiao.meiduo.site/Fkj6tQi3xJwVXi1u2swCElotfdCi">18303610801<i class="el-icon-arrow-down el-icon--right"></i>
+          <img width="30" :src="userInfo.photo">{{ userInfo.name }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>账户设置</el-dropdown-item>
