@@ -25,8 +25,14 @@ axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0/'
 // 可以试用 json-bigint 来处理，他会帮你把超出范围的数字处理好
 axios.defaults.transformResponse = [function (data) {
   // data 是未经处理的后端相应数据：JSON格式字符串
-  return JSONbig.parse(data)
-  
+  // return JSONbig.parse(data)
+  try {
+    // data 数据可能不是标准的 JSON 格式字符串，否则会导致 JSONbig.parse(data)转换失败报错
+    return JSONbig.parse(data)
+  } catch (err) {
+    // 无法转换的数据直接返回原样
+    return data
+  }
 }]
 
 /**
@@ -56,9 +62,15 @@ axios.interceptors.request.use(config => {
  */
 
 axios.interceptors.response.use(response => { // >= 200 && < 400 的状态码进入这里
-  // console.log('response => ', response)
+  console.log('response => ', response)
   // 将响应数据处理成统一的数据格式方便使用
-  return response.data.data
+
+  // 如果返回的数据格式是对象
+  if (typeof response.data === 'object') {
+    return response.data.data    
+  } else {
+    return response.data
+  }
 }, error => { // >=400 的状态码进入这里
   const status = error.response.status
   if (status === 401) {

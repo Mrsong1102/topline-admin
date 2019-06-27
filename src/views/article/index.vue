@@ -134,7 +134,8 @@ export default {
         value1: ''
       },
       totalCount: 0,
-      articleLoading: false
+      articleLoading: false,
+      page:1
     }
   },
 
@@ -164,6 +165,7 @@ export default {
     },
 
     handleCurrentChange (page) {
+      this.page = page
       // 当页码发生改变的时候，请求改页码对应的数据
       this.loadArticles(page)
     },
@@ -173,7 +175,8 @@ export default {
         method: 'DELETE',
         url: `/articles/${article.id}`
       }).then(data => {
-        console.log(data)
+        // console.log(data)
+        this.loadArticles(this.page)
       })
     }
   }
