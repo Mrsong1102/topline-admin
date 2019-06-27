@@ -41,34 +41,65 @@
         <span>共找到15条符合条件的内容</span>
         <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
       </div>
+
         <!-- table表格 -->
+        <!--
+          data 用来指定表格的数据
+          表格不需要我们自己手动遍历
+          只需要把数据给 el-table 的 data 属性就可以了
+          然后配置 el-table-comlumn 需要展示的数据字段即可
+         -->
         <el-table
-        :data="tableData"
+        :data="articles"
         style="width: 100%">
           <el-table-column
-          prop="date"
-          label="日期"
+          prop="cover.images[0]"
+          label="封面"
+          width="80">
+
+          <!-- 表格列默认只能输出文本，如果需要自定义里面的内容，则需要 -->
+          <!--
+            slot-scope 是插槽作用域，现在先听这个名词，知道是值scope 是起的名字，scope 中有一个成员 row
+            也就是说 scope.row 就是当前的遍历对象
+            自定义模板，el-table-column 的 prop 就没有意义了
+           -->
+            <template slot-scope="scope">
+              <img width="30" height="30" :src="scope.row.cover.images[0]" alt="">
+            </template>
+          </el-table-column>
+          <el-table-column
+          prop="title"
+          label="标题"
           width="180">
           </el-table-column>
           <el-table-column
-          prop="name"
-          label="姓名"
+          prop="pubdate"
+          label="发布日期"
           width="180">
           </el-table-column>
           <el-table-column
-          prop="address"
-          label="地址">
+          prop="status"
+          label="状态">
           </el-table-column>
         </el-table>
         <!-- /table表格 -->
 
-        <!-- 分页 -->
+        <!-- 数据分页 -->
+        <!--
+          一：分多少页
+            每页多大，默认是10条每页，我们的借口如果没有指定每页条数，则默认也是按照每页10条返回数据
+            有多少数据
+            二：页面改变加载对应的页码数据
+         -->
+
         <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="1000">
+          background
+          layout="prev, pager, next"
+          :total="totalCount"
+          @current-change="handleCurrentChange"
+          >
         </el-pagination>
-        <!-- /分页 -->
+        <!-- /数据分页 -->
     </el-card>
     <!-- /列表 -->
 
@@ -81,23 +112,7 @@ export default {
   name: 'ArticleList',
   data () {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
+      articles: [], // 列表数据
       form: {
         name: '',
         region: '',
@@ -108,26 +123,37 @@ export default {
         resource: '',
         desc: '',
         value1: ''
-      }
+      },
+      totalCount: 0
     }
   },
 
   created () {
-    this.$http({
-      method: 'GET',
-      url: '/articles',
-      headers: {
-        // 自定义发送请求头
-        // Authorization: `Bearer ${userInfo.token}` // 注意：Bearer 和 token 之间要有空格
-      }
-    }).then(data => {
-      console.log(data)
-    })
+    this.loadArticles()
   },
 
   methods: {
+    loadArticles (page = 1) { // 函数参数的默认值
+      this.$http({
+        method: 'GET',
+        url: '/articles',
+        params: {
+          page, // 请求数据的页码，不传默认为1
+          per_page: 10 // 请求数据的每页数量，不传默认为10
+        }
+      }).then(data => {
+        this.articles = data.results // 列表数据
+        this.totalCount = data.total_count // 总记录数
+      })
+    },
+
     onSubmit () {
       console.log('submit!')
+    },
+
+    handleCurrentChange (page) {
+      // 当页码发生改变的时候，请求改页码对应的数据
+      this.loadArticles(page)
     }
   }
 }
