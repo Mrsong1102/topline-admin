@@ -76,6 +76,7 @@
 </template>
 
 <script>
+const userInfo = JSON.parse(window.localStorage.getItem('user_info'))
 export default {
   name: 'ArticleList',
   data () {
@@ -110,6 +111,20 @@ export default {
       }
     }
   },
+
+  created () {
+    this.$http({
+      method: 'GET',
+      url: '/articles',
+      headers: {
+        // 自定义发送请求头
+        Authorization: `Bearer ${userInfo.token}` // 注意：Bearer 和 token 之间要有空格
+      }
+    }).then(res => {
+      console.log(res)
+    })
+  },
+
   methods: {
     onSubmit () {
       console.log('submit!')

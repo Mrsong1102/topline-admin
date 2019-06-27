@@ -50,7 +50,7 @@ const router = new Router({
  * form 来自哪里
  * next 允许通过的方法
  * 渲染路由之前先经过下边代码
-
+*/
 router.beforeEach((to, from, next) => {
   nprogress.start()
   const userInfo = window.localStorage.getItem('user_info')
@@ -74,7 +74,6 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
-*/
 
 /**
  * 路由导航完成的时候进入这里
