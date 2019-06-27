@@ -102,9 +102,9 @@ export default {
         method: 'POST',
         url: 'authorizations',
         data: this.form
-      }).then(res => { // >= 200 && < 400 的状态码都会进入这里
+      }).then(data => { // >= 200 && < 400 的状态码都会进入这里
         // 登录成功，将接口返回的用户信息数据放到本地存储
-        window.localStorage.setItem('user_info', JSON.stringify(res.data.data))
+        window.localStorage.setItem('user_info', JSON.stringify(data))
 
         // Element 提供的 Message 消息提示组件，这也是组件调用的一种形式
         this.$message({
@@ -164,8 +164,8 @@ export default {
       this.$http({
         method: 'GET',
         url: `captchas/${this.form.mobile}`
-      }).then(res => {
-        const data = res.data.data
+      }).then(data => {
+        // const data = res.data.data
         // 请检测data的数据结构， 保证data.gt, data.challenge, data.success有值
         window.initGeetest(
           {
@@ -204,7 +204,7 @@ export default {
                     seccode,
                     validate
                   }
-                }).then(res => {
+                }).then(data => {
                   // 发送短信之后开始倒计时
                   this.codeCountDown()
                 })
