@@ -65,7 +65,7 @@
             自定义模板，el-table-column 的 prop 就没有意义了
            -->
             <template slot-scope="scope">
-              <img width="50" height="50" :src="scope.row.cover.images[0]" alt="">
+              <img width="60" height="50" :src="scope.row.cover.images[0]" alt="">
             </template>
           </el-table-column>
           <el-table-column
@@ -76,14 +76,16 @@
           <el-table-column
             prop="pubdate"
             label="发布日期"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="status"
-            label="状态">
+            width="200">
           </el-table-column>
           <el-table-column
             label="状态">
+            <template slot-scope="scope">
+              <el-tag :type="statTypes[scope.row.status].type">{{statTypes[scope.row.status].label}}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作">
             <template slot-scope="scope">
               <el-button type="success" plain >修改</el-button>
               <el-button type="danger" plain @click="handleDelete(scope.row)">删除</el-button>
@@ -135,7 +137,29 @@ export default {
       },
       totalCount: 0,
       articleLoading: false,
-      page: 1
+      page: 1,
+      statTypes: [
+        {
+          type: 'info',
+          label: '草稿'
+        },
+        {
+          type: '',
+          label: '待审核'
+        },
+        {
+          type: 'success',
+          label: '审核通过'
+        },
+        {
+          type: 'warning',
+          label: '审核失败'
+        },
+        {
+          type: 'danger',
+          label: '已删除'
+        },
+      ]
     }
   },
 
