@@ -4,22 +4,29 @@
     <el-card class="filter-card">
       <div slot="header" class="clearfix">
         <span>筛选条件</span>
-        <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
       </div>
       <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="特殊资源">
+        <el-form-item label="文章状态">
           <el-radio-group v-model="form.resource">
-            <el-radio label="线上品牌商赞助"></el-radio>
-            <el-radio label="线下场地免费"></el-radio>
+            <el-radio label="全部"></el-radio>
+            <el-radio
+              v-for="item in statTypes"
+              :key="item.label"
+              :label="item.label"
+            ></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="活动区域">
+        <el-form-item label="频道列表">
           <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+            <el-option
+              v-for="item in channels"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+              ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="活动形式">
+        <el-form-item label="时间选择">
           <el-date-picker
           v-model="form.value1"
           type="daterange"
@@ -65,7 +72,7 @@
             自定义模板，el-table-column 的 prop 就没有意义了
            -->
             <template slot-scope="scope">
-              <img width="60" height="50" :src="scope.row.cover.images[0]" alt="">
+              <img width="75" height="50" :src="scope.row.cover.images[0]" alt="">
             </template>
           </el-table-column>
           <el-table-column
@@ -158,16 +165,22 @@ export default {
         {
           type: 'danger',
           label: '已删除'
-        },
-      ]
+        }
+      ],
+      channels: [] // 频道列表
     }
   },
 
   created () {
+    // 加载文章列表
     this.loadArticles()
+
+    // 加载频道列表
+    this.loadChannels()
   },
 
   methods: {
+    // 文章列表
     loadArticles (page = 1) { // 函数参数的默认值
       this.articleLoading = true
       this.$http({
@@ -181,6 +194,16 @@ export default {
         this.articles = data.results // 列表数据
         this.totalCount = data.total_count // 总记录数
         this.articleLoading = false
+      })
+    },
+
+    // 频道列表
+    loadChannels () {
+      this.$http({
+        method: 'GET',
+        url: '/channels'
+      }).then(data => {
+        this.channels = data.channels
       })
     },
 

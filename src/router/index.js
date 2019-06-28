@@ -16,7 +16,6 @@ const router = new Router({
   //   component: () => import('@/views/home')// @表示src 目录，无论当前文件在哪里，@都是src
   // },
     {
-      name: 'layout',
       path: '/',
       component: () => import('@/views/layout'),
       children: [ // 所有的 children 路由都显示到父路由的 router-view 中
