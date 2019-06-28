@@ -62,12 +62,12 @@ axios.interceptors.request.use(config => {
  */
 
 axios.interceptors.response.use(response => { // >= 200 && < 400 的状态码进入这里
-  console.log('response => ', response)
+  // console.log('response => ', response)
   // 将响应数据处理成统一的数据格式方便使用
 
   // 如果返回的数据格式是对象
-  if (typeof response.data === 'object') {
-    return response.data.data    
+  if (typeof response.data === 'object' && response.data.data) {
+    return response.data.data
   } else {
     return response.data
   }

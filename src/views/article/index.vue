@@ -65,13 +65,13 @@
             自定义模板，el-table-column 的 prop 就没有意义了
            -->
             <template slot-scope="scope">
-              <img width="30" height="30" :src="scope.row.cover.images[0]" alt="">
+              <img width="50" height="50" :src="scope.row.cover.images[0]" alt="">
             </template>
           </el-table-column>
           <el-table-column
             prop="title"
             label="标题"
-            width="180">
+            width="220">
           </el-table-column>
           <el-table-column
             prop="pubdate"
@@ -135,7 +135,7 @@ export default {
       },
       totalCount: 0,
       articleLoading: false,
-      page:1
+      page: 1
     }
   },
 
@@ -171,12 +171,30 @@ export default {
     },
 
     handleDelete (article) {
-      this.$http({
-        method: 'DELETE',
-        url: `/articles/${article.id}`
-      }).then(data => {
-        // console.log(data)
-        this.loadArticles(this.page)
+      this.$confirm('确认要删除么?', '删除提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => { // 确认执行
+        // 发送删除请求
+        this.$http({
+          method: 'DELETE',
+          url: `/articles/${article.id}`
+        }).then(data => {
+          // 提示删除成功
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+
+          // 重新加载数据列表
+          this.loadArticles(this.page)
+        })
+      }).catch(() => { // 取消执行
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     }
   }
