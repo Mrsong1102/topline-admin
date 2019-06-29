@@ -19,17 +19,37 @@
       <el-form-item label="封面">
       </el-form-item>
       <el-form-item label="频道">
-        <el-select v-model="articleForm.channel_id">
-          <el-option label="区域一" value="shanghai"></el-option>
-        </el-select>
+        <!--
+          组建通信：
+          父传子：Props Down
+          子传父：Events Up
+         -->
+        <!-- <article-channel
+          :value="articleForm.channel_id"
+          @input="articleForm.channel_id = $event"
+        ></article-channel> -->
+
+        <!-- 
+          v-model 就是：
+          :value="articleForm.channel_id"
+          @input="articleForm.channel_id = $event"
+          简写
+         -->
+        <article-channel
+          v-model="articleForm.channel_id"
+        ></article-channel>
       </el-form-item>
     </el-form>
   </el-card>
 </template>
 
 <script>
+import ArticleChannel from '@/components/article-channel'
 export default {
   name: 'AppPublish',
+  components: {
+    ArticleChannel
+  },
   data () {
     return {
       articleForm: {
