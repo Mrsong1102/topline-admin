@@ -3,8 +3,8 @@
     <div slot="header" class="hander">
       <span>发布文章</span>
       <div>
-        <el-button type="success">发表</el-button>
-        <el-button type="">存入草稿</el-button>
+        <el-button type="success" @click="handlePublish(false)">发表</el-button>
+        <el-button type="" @click="handlePublish(true)">存入草稿</el-button>
       </div>
     </div>
     <el-form>
@@ -37,10 +37,31 @@ export default {
         content: '', // 文章内容
         cover: { // 封面
           type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
-          iimages: [], // 图片链接
+          images: [] // 图片链接
         },
         channel_id: 4 // 文章所属频道 id
       }
+    }
+  },
+
+  methods: {
+    handlePublish (draft = false) {
+      this.$http({
+        method: 'POST',
+        url: '/articles',
+        data: this.articleForm,
+        params: {
+          draft
+        }
+      }).then(data => {
+        this.$message({
+          type: 'success',
+          message: '发表成功'
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$message.error('发表失败')
+      })
     }
   }
 }
