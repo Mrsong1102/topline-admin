@@ -35,7 +35,7 @@ export default {
   methods: {
     handleChange (val) {
       // console.log(val)
-      this.$emit('input',val)
+      this.$emit('input', val)
     },
 
     // 频道列表
