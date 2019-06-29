@@ -1,7 +1,30 @@
 <template>
-  <div>
-    <p>publish Component</p>
-  </div>
+  <el-card class="publish-card">
+    <div slot="header" class="hander">
+      <span>发布文章</span>
+      <div>
+        <el-button type="success">发表</el-button>
+        <el-button type="">存入草稿</el-button>
+      </div>
+    </div>
+    <el-form>
+      <el-form-item label="标题">
+        <el-input type="text" v-model="articleForm.title"></el-input>
+      </el-form-item>
+    </el-form>
+    <el-form>
+      <el-form-item label="内容">
+        <el-input type="textarea" v-model="articleForm.content"></el-input>
+      </el-form-item>
+      <el-form-item label="封面">
+      </el-form-item>
+      <el-form-item label="频道">
+        <el-select v-model="articleForm.channel_id">
+          <el-option label="区域一" value="shanghai"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
 
 <script>
@@ -9,12 +32,26 @@ export default {
   name: 'AppPublish',
   data () {
     return {
-
+      articleForm: {
+        title: '', // 文章标题
+        content: '', // 文章内容
+        cover: { // 封面
+          type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+          iimages: [], // 图片链接
+        },
+        channel_id: 4 // 文章所属频道 id
+      }
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+  .publish-card {
+    .hander {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 </style>
