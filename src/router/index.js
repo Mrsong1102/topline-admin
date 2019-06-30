@@ -38,6 +38,11 @@ const router = new Router({
           name: 'article-list',
           path: '/article', // 他就是 layout 的默认子路由
           component: () => import('@/views/article')
+        },
+        {
+          name: 'article-comment',
+          path: '/comment', // 他就是 layout 的默认子路由
+          component: () => import('@/views/comment')
         }
       ]
     },
