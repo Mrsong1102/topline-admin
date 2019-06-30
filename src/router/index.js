@@ -26,23 +26,28 @@ const router = new Router({
         },
         { // 发布文章
           name: 'publish',
-          path: '/publish', // 他就是 layout 的默认子路由
+          path: '/publish',
           component: () => import('@/views/publish')
         },
         { // 编辑文章
           name: 'publish-edit',
-          path: '/publish/:id', // 他就是 layout 的默认子路由
+          path: '/publish/:id',
           component: () => import('@/views/publish')
         },
         {
           name: 'article-list',
-          path: '/article', // 他就是 layout 的默认子路由
+          path: '/article',
           component: () => import('@/views/article')
         },
         {
           name: 'article-comment',
-          path: '/comment', // 他就是 layout 的默认子路由
+          path: '/comment',
           component: () => import('@/views/comment')
+        },
+        { // 账户设置
+          name: 'account-setting',
+          path: '/account',
+          component: () => import('@/views/account')
         }
       ]
     },
