@@ -12,7 +12,8 @@
           <el-switch
             v-model="scope.row.comment_status"
             active-color="#13ce66"
-            inactive-color="#ff4949">
+            inactive-color="#ff4949"
+            @change="handleChangeCommentStatus(scope.row)">
           </el-switch>
         </template>
       </el-table-column>
@@ -41,6 +42,27 @@ export default {
         }
       }).then(data => {
         this.articles = data.results
+      })
+    },
+
+    handleChangeCommentStatus (item) {
+      this.$http({
+        method: 'PUT',
+        url: '/comments/status',
+        params: {
+          article_id: item.id.toString()
+        },
+        data: {
+            allow_comment: item.comment_status
+        }
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: `${item.comment_status ? '启用' : '关闭'}评论状态成功`
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$message.error('修改评论状态失败！')
       })
     }
   }
