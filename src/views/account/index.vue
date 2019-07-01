@@ -52,7 +52,7 @@
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
-          :http-request="handleUpdate">
+          :http-request="handleUpload">
           <img class="avatar" v-if="userInfo.photo" :src="userInfo.photo">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
@@ -94,8 +94,11 @@ export default {
           intro,
           email
         }
-      }).then(() => {
-        this.message({
+      }).then((data) => {
+        // 提交 mutation, 修改容器中用户信息
+        this.$store.commit('changeUser', data)
+
+        this.$message({
           type: 'success',
           message: '更新用户信息成功'
         })
@@ -107,13 +110,13 @@ export default {
 
     handleAvatarSuccess () {},
     beforeAvatarUpload () {},
-    handleUpload (UploadConfig) {
+    handleUpload (uploadConfig) {
       // axios 上传文件
       // 1.构建一个 FormData 表单对象
       // 将文件对象添加到 FormData 中
       // 2.将 FormData 配置到请求体 data 选项中
       const formData = new FormData()
-      formData.append('photo', UploadConfig.file)
+      formData.append('photo', uploadConfig.file)
       this.$http({
         method: 'PATCH',
         url: '/user/photo',
@@ -123,6 +126,8 @@ export default {
         // }
       }).then(data => {
         this.userInfo.photo = data.photo
+        // 将修改之后的照片信息同步到容器中
+        this.$store.commit('changeUser', this.userInfo)
         this.$message({
           type: 'success',
           message: '上传头像成功'

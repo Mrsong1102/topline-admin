@@ -4,7 +4,7 @@
     <el-col :span="10">
       <el-dropdown trigger="click">
         <span class="el-dropdown-link">
-          <img width="30" :src="userInfo.photo">{{ userInfo.name }}<i class="el-icon-arrow-down el-icon--right"></i>
+          <img width="30" :src="$store.state.user.photo">{{ $store.state.user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>账户设置</el-dropdown-item>
@@ -27,11 +27,11 @@ export default {
   name: 'AppHeader',
   data () {
     return {
-      userInfo: {}
+      // userInfo: {}
     }
   },
   created () {
-    this.userInfo = JSON.parse(window.localStorage.getItem('user_info'))
+    // this.userInfo = JSON.parse(window.localStorage.getItem('user_info'))
   },
 
   methods: {

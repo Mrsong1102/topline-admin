@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <h1>{{ $store.state.count }}</h1>
-    <button @click="$store.commit('increment')">点击提交mutation改变count</button>
     <router-view/>
   </div>
 </template>
