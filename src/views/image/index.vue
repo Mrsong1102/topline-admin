@@ -13,13 +13,14 @@
     <el-row :gutter="20">
       <el-col :span="4" v-for="item in images" :key="item.id">
         <el-card :body-style="{ padding: '0px' }">
-            <img :src="item.url" style="max-width:100%;">
+            <img :src="item.url" style="width: 100%">
           <div style="padding: 10px; display: flex; justify-content: center;">
             <el-button
               type="primary"
               :icon="item.is_collected ? 'el-icon-star-on' : 'el-icon-star-off'"
               circle
               plain
+              @click="handleCollect(item)"
             ></el-button>
             <el-button type="primary" icon="el-icon-delete" circle plain></el-button>
           </div>
@@ -50,6 +51,26 @@ export default {
         url: '/user/images'
       }).then(data => {
         this.images = data.results
+      })
+    },
+
+    handleCollect (item) {
+      const collect = !item.is_collected
+      this.$http({
+        method: 'PUT',
+        url: `/user/images/${item.id}`,
+        data: {
+          collect: !item.is_collected
+        }
+      }).then(data => {
+        item.is_collected = collect
+        this.$message({
+          type: 'success',
+          message: `${collect ? '' : '取消'}收藏成功`
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(`${collect ? '' : '取消'}收藏失败！`)
       })
     }
   }
