@@ -41,7 +41,7 @@
         <i class="el-icon-s-comment"></i>
         <span slot="title">评论列表</span>
       </el-menu-item>
-      <el-menu-item index="1-4">
+      <el-menu-item index="/image">
         <i class="el-icon-box"></i>
         <span slot="title">素材管理</span>
       </el-menu-item>
