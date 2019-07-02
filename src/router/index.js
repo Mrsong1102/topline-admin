@@ -53,6 +53,11 @@ const router = new Router({
           name: 'image-list',
           path: '/image',
           component: () => import('@/views/image')
+        },
+        { // 粉丝概括
+          name: 'fans-overview',
+          path: '/fans/overview',
+          component: () => import('@/views/fans')
         }
       ]
     },
