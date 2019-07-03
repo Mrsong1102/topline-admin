@@ -36,6 +36,14 @@
           <el-radio :label="0">无图</el-radio>
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
+        <!-- 根据不同的 type 遍历显示上传图片组件 -->
+        <template v-if="articleForm.cover.type > 0">
+          <el-row>
+            <el-col :span="6" v-for="n in articleForm.cover.type" :key="n">
+              <UploadImage></UploadImage>
+            </el-col>
+          </el-row>
+        </template>
       </el-form-item>
       <el-form-item label="频道">
         <!--
@@ -63,6 +71,7 @@
 </template>
 
 <script>
+import UploadImage from './components/upload-image'
 import ArticleChannel from '@/components/article-channel'
 // require styles
 import 'quill/dist/quill.core.css'
@@ -83,7 +92,8 @@ export default {
 
   components: {
     ArticleChannel,
-    quillEditor
+    quillEditor,
+    UploadImage
   },
   data () {
     return {
@@ -91,7 +101,7 @@ export default {
         title: '', // 文章标题
         content: '', // 文章内容
         cover: { // 封面
-          type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+          type: 1, // 封面类型 -1:自动，0-无图，1-1张，3-3张
           images: [] // 图片链接
         },
         channel_id: '' // 文章所属频道 id
