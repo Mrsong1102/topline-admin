@@ -13,3 +13,6 @@ body {
   height: 220px !important;
   overflow: scroll;
 }
+a {
+  text-decoration: none;
+}

@@ -8,7 +8,7 @@
         <el-radio-button label="全部" @click.native="loadImages(false)"></el-radio-button>
         <el-radio-button label="收藏" @click.native="loadImages(true)"></el-radio-button>
       </el-radio-group>
-      <!-- 
+      <!--
         on-success 是一个 props 参数
         props 绑定的数据是一个表达式，它会将表达式的计算结果绑定到这里
        -->

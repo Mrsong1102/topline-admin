@@ -55,7 +55,8 @@
         <i class="el-icon-upload"></i>
         <span slot="title">图文数据</span>
       </el-menu-item>
-      <el-menu-item index="/fans/overview">
+      <!-- /fans 如果需要再加前边路径，不加是为了可以跳转 -->
+      <el-menu-item index="/overview">
         <i class="el-icon-s-order"></i>
         <span slot="title">粉丝概况</span>
       </el-menu-item>

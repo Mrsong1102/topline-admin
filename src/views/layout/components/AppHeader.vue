@@ -7,7 +7,10 @@
           <img width="30" :src="$store.state.user.photo">{{ $store.state.user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>账户设置</el-dropdown-item>
+            <el-dropdown-item>
+              <router-link to="account" style="color:#606266">账户设置
+              </router-link>
+              </el-dropdown-item>
 
             <!--
               给组件注册原生事件：@原生事件类型.native="处理函数"
