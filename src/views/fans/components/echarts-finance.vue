@@ -1,6 +1,6 @@
 <template>
   <!-- 1.准备图表容器 -->
-  <div ref="main" style="width: 600px;height:400px;"></div>
+  <div ref="main" style="width: 800px;height:500px;"></div>
 </template>
 
 <script>
