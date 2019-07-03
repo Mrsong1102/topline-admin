@@ -40,7 +40,7 @@
         <template v-if="articleForm.cover.type > 0">
           <el-row>
             <el-col :span="6" v-for="n in articleForm.cover.type" :key="n">
-              <UploadImage></UploadImage>
+              <UploadImage v-model="articleForm.cover.images[ n - 1 ]"></UploadImage>
             </el-col>
           </el-row>
         </template>
@@ -101,8 +101,10 @@ export default {
         title: '', // 文章标题
         content: '', // 文章内容
         cover: { // 封面
-          type: 1, // 封面类型 -1:自动，0-无图，1-1张，3-3张
-          images: [] // 图片链接
+          type: 1,
+          images: [
+            // 封面类型 -1:自动，0-无图，1-1张，3-3张
+          ] // 图片链接,这里是真正存储图片的数组，图片链接
         },
         channel_id: '' // 文章所属频道 id
       },

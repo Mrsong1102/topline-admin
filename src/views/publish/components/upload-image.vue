@@ -3,11 +3,13 @@
     <div class="box-wrap" @click="handleShowMediaBox">
       <p>点击选择图片</p>
       <i
+        v-if="!value"
         style="margin-top: 20px;
         font-size: 90px; color: #eee;"
         class="iconfont icon-image_upload"
       ></i>
-      <img width="120" src="http://toutiao.meiduo.site/FvGUrO7Ru_T2ToQwn_OznfwKnjoL">
+      <!-- 这是给用户看到的这个已经选好的当前封面 -->
+      <img v-else width="120" :src="value">
     </div>
 
     <!-- 对话框 -->
@@ -22,8 +24,9 @@
             action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
             :headers="{ Authorization: `Bearer ${$store.state.user.token}` }"
             name="image"
-            :on-success="handleUploadSuccess"
-            :show-file-list="false">
+            v-bind:on-success="handleUploadSuccess"
+            :show-file-list="false"
+          >
             <!-- 上传成功，要预览的图片 -->
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -33,7 +36,7 @@
       </el-tabs>
       <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      <el-button type="primary" @click="handleOk">确 定</el-button>
       </span>
     </el-dialog>
     <!-- /对话框 -->
@@ -43,6 +46,8 @@
 <script>
 export default {
   name: 'UploadImage',
+  // value 就是 cover.images[索引]的图片
+  props: ['value'],
   data () {
     return {
       dialogVisible: false,
@@ -57,9 +62,15 @@ export default {
       // 3.用户可以点击切换图片的选中状态
       // 4.用户点击确定，我们拿到所选的图片链接，将数据给谁？
     },
-    
+
     handleUploadSuccess (res) {
+      // 上传成功预览图片
       this.imageUrl = res.data.url
+    },
+
+    handleOk () {
+      this.dialogVisible = false // 隐藏对话框
+      this.$emit('input', this.imageUrl) // 将数据同步到绑定的数据中
     }
   }
 }

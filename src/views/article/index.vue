@@ -71,7 +71,7 @@
             自定义模板，el-table-column 的 prop 就没有意义了
            -->
             <template slot-scope="scope">
-              <img width="75" height="50" :src="scope.row.cover.images[0]" alt="">
+              <img width="50" height="50" :src="scope.row.cover.images[0]" alt="">
             </template>
           </el-table-column>
           <el-table-column
